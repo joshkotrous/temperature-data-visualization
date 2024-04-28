@@ -25,7 +25,9 @@ export const Geocode = async (lat: number, lng: number): Promise<Location> => {
   let country: string = "";
   try {
     const response: AxiosResponse<GeocodeResponse> = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCdBWJ4AXT-ofTvY4bR9qrvtPEFvFyJp-M`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${
+        import.meta.env.VITE_GOOGLE_API_KEY
+      }`
     );
     console.log(response.data);
     for (let i = 0; i < response.data["results"].length; i++) {

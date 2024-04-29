@@ -4,15 +4,32 @@ import { useState, useEffect, useRef } from "react";
 import { GetHeatmapData } from "../hooks/GetHeatmapData";
 import { Geocode } from "../hooks/Geocode";
 import LocationPopover from "./LocationPopover";
+import { CalendarDate } from "@internationalized/date";
+import { filter } from "lodash"; // Import Lodash
 
-const HeatmapGlobe = () => {
+interface HeatmapGlobeProps {
+  date: CalendarDate;
+}
+
+const HeatmapGlobe: React.FC<HeatmapGlobeProps> = ({ date }) => {
   const [heatmapData, setHeatmapData] = useState<Array<Object>>([]);
+  const [initialData, setInitialData] = useState<Array<Object>>([]);
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
   const coordinatesRef = useRef({ x: 0, y: 0 });
+
+  const filterData = (date: CalendarDate) => {
+    // console.log(String(date));
+    const newData = filter(
+      initialData,
+      (item: any) => Date.parse(item["0"]) === Date.parse(String(date))
+    );
+    console.log(newData);
+    return newData;
+  };
 
   const initalizeData = async (dataArray: any) => {
     let gData: any = await dataArray.map((item: any, index: any) => {
@@ -74,14 +91,23 @@ const HeatmapGlobe = () => {
     }
   };
 
-  const initialize = async () => {
+  const getData = async () => {
     const data = await GetHeatmapData();
-    await initalizeData(data);
+    setInitialData(data);
+  };
+  const initialize = async () => {
+    if (initialData.length < 1) {
+      await getData();
+      await initalizeData(initialData);
+    } else {
+      const filteredData = await filterData(date);
+      await initalizeData(filteredData);
+    }
   };
 
   useEffect(() => {
     initialize();
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     if (heatmapData.length > 1) {

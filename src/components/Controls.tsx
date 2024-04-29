@@ -101,8 +101,7 @@ const Controls: React.FC<ControlsProps> = ({ date, setDate }) => {
           }}
         >
           {selectedKeys[0] === "months" && `${date.month}/${date.year}`}
-          {selectedKeys[0] === "days" &&
-            `${date.month}/${date.day}/${date.year}`}
+
           {(selectedKeys[0] === "years" || selectedKeys[0] === "decades") &&
             `${date.year}`}
         </Button>
@@ -130,7 +129,6 @@ const Controls: React.FC<ControlsProps> = ({ date, setDate }) => {
             <DropdownItem key="years">Years</DropdownItem>
 
             <DropdownItem key="months">Months</DropdownItem>
-            <DropdownItem key="days">Days</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </ButtonGroup>

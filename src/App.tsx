@@ -39,7 +39,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p> */}
       <NextUIProvider>
-        <HeatmapGlobe />
+        <HeatmapGlobe date={date} />
         <Controls date={date} setDate={setDate} />
       </NextUIProvider>
     </>
